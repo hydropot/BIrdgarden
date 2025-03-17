@@ -56,10 +56,16 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
-    public void ClearArea(BoundsInt area, Tilemap tilemap)
+    public void ClearArea(BoundsInt area, Tilemap tilemap)////设置为空 tile
     {
         SetTilesBlock(area, null, tilemap);
     }
+    
+    public void ReleaseArea(BoundsInt area)//释放区域时设置为白色 tile
+    {
+        SetTilesBlock(area, tileBases[TileType.White], MainTilemap);
+    }
+
 
     public bool CanTakeArea(BoundsInt area)
     {

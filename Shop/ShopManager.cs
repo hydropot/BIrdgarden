@@ -8,7 +8,7 @@ public class ShopManager : MonoBehaviour
 {
     //singletone pattern
     public static ShopManager current;
-    
+
     //currency sprites for initialization
     public static Dictionary<CurrencyType, Sprite> currencySprites = new Dictionary<CurrencyType, Sprite>();
     [SerializeField] private List<Sprite> sprites;
@@ -33,7 +33,7 @@ public class ShopManager : MonoBehaviour
 
         rt = GetComponent<RectTransform>();
         prt = transform.parent.GetComponent<RectTransform>();
-        
+
         //subscribe method to an event
         EventManager.Instance.AddListener<LevelChangedGameEvent>(OnLevelChanged);
     }
@@ -43,11 +43,11 @@ public class ShopManager : MonoBehaviour
         //add sprites
         currencySprites.Add(CurrencyType.Coins, sprites[0]);
         currencySprites.Add(CurrencyType.Crystals, sprites[1]);
-        
+
         //load shop items and initialize the shop
         Load();
         Initialize();
-        
+
         //disable the shop window so the tabs are not visible
         gameObject.SetActive(false);
     }
@@ -56,7 +56,7 @@ public class ShopManager : MonoBehaviour
     {
         //load every shop item from resources
         ShopItem[] items = Resources.LoadAll<ShopItem>("Shop");
-        
+
         //initialize the dictionary
         shopItems.Add(ObjectType.Animals, new List<ShopItem>());
         shopItems.Add(ObjectType.AnimalHomes, new List<ShopItem>());
@@ -102,7 +102,7 @@ public class ShopManager : MonoBehaviour
             }
         }
     }
-    
+
     public void ShopButton_Click()
     {
         //animation time
@@ -118,7 +118,7 @@ public class ShopManager : MonoBehaviour
         {
             //close the shop
             LeanTween.moveY(prt, prt.anchoredPosition.y - rt.sizeDelta.y, time)
-                .setOnComplete(delegate()
+                .setOnComplete(delegate ()
                 {
                     gameObject.SetActive(false);
                 });
