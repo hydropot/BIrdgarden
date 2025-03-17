@@ -113,6 +113,7 @@ public class ShopManager : MonoBehaviour
             LeanTween.moveY(prt, prt.anchoredPosition.y + rt.sizeDelta.y, time);
             opened = true;
             gameObject.SetActive(true);
+            Debug.Log("打开了");
         }
         else
         {
@@ -123,6 +124,7 @@ public class ShopManager : MonoBehaviour
                     gameObject.SetActive(false);
                 });
             opened = false;
+            Debug.Log("关上了");
         }
     }
 

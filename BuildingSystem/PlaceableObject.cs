@@ -44,7 +44,7 @@ public class PlaceableObject : MonoBehaviour
                 Destroy(gameObject);
             }
 
-            ShopManager.current.ShopButton_Click();
+            //ShopManager.current.ShopButton_Click();
         }
         else
         {
@@ -67,7 +67,6 @@ public class PlaceableObject : MonoBehaviour
         {
             buildingmode = true;
         }
-        Debug.Log(buildingmode);
         DetectLongPress();
     }
 

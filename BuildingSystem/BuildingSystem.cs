@@ -11,7 +11,7 @@ public class BuildingSystem : MonoBehaviour
     public Tilemap TempTilemap;
 
     // 添加用于全局访问的 Building GameObject 引用
-    public GameObject buildingRoot; // 在Inspector中拖拽赋值
+    public GameObject buildingRoot; //与PlaceableObject中的buildingmode有关
     public static GameObject BuildingRoot;
 
     private static Dictionary<TileType, TileBase> tileBases = new Dictionary<TileType, TileBase>();
