@@ -9,6 +9,7 @@ public class PlaceableObject : MonoBehaviour
     private float pressTime = 0f;
     private bool isPressing = false;
 
+    public static bool buildingmode = false;
     public bool CanBePlaced()
     {
         Vector3Int positionInt = BuildingSystem.current.gridLayout.LocalToCell(transform.position);
@@ -58,21 +59,31 @@ public class PlaceableObject : MonoBehaviour
 
     private void Update()
     {
+        if (BuildingSystem.BuildingRoot == null || !BuildingSystem.BuildingRoot.activeSelf)
+        {
+            buildingmode = false;
+        }
+        else
+        {
+            buildingmode = true;
+        }
+        Debug.Log(buildingmode);
         DetectLongPress();
     }
 
-
     private void DetectLongPress()
     {
-        // 只对已放置的物体启用长按检测
         if (!Placed) return;
+
+        // 使用集中管理的 BuildingRoot
+        //if (BuildingSystem.isBuildMode == null || !BuildingSystem.isBuildMode.activeSelf) return;
+        if (!buildingmode) return;
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
         if (Input.GetMouseButtonDown(0))
         {
-            // 判断鼠标是否点击在该物体上
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
             if (hit.collider != null && hit.collider.gameObject == this.gameObject)
             {
@@ -85,20 +96,17 @@ public class PlaceableObject : MonoBehaviour
         {
             pressTime += Time.deltaTime;
 
-            if (pressTime >= 1f)
+            if (pressTime >= 2f)
             {
-                // 长按成功，进入移动模式
                 isPressing = false;
 
-                // 清除之前占用的 Tile 区域
                 Vector3Int positionInt = BuildingSystem.current.gridLayout.LocalToCell(transform.position);
                 BoundsInt areaTemp = area;
                 areaTemp.position = positionInt;
-                //BuildingSystem.current.ClearArea(areaTemp, BuildingSystem.current.MainTilemap);
+
                 BuildingSystem.current.ReleaseArea(areaTemp);
 
-
-                Placed = false; // 标记为未放置状态
+                Placed = false;
                 gameObject.AddComponent<ObjectDrag>();
             }
         }

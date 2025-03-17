@@ -10,6 +10,10 @@ public class BuildingSystem : MonoBehaviour
     public Tilemap MainTilemap;
     public Tilemap TempTilemap;
 
+    // 添加用于全局访问的 Building GameObject 引用
+    public GameObject buildingRoot; // 在Inspector中拖拽赋值
+    public static GameObject BuildingRoot;
+
     private static Dictionary<TileType, TileBase> tileBases = new Dictionary<TileType, TileBase>();
 
     private BoundsInt prevArea;
@@ -17,6 +21,7 @@ public class BuildingSystem : MonoBehaviour
     private void Awake()
     {
         current = this;
+        BuildingRoot = buildingRoot; // 设置静态引用
     }
 
     private void Start()
