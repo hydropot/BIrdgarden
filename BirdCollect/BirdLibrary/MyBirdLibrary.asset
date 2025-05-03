@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c34db7159fb4794a98c86acd9463ed9, type: 3}
   m_Name: MyBirdLibrary
   m_EditorClassIdentifier: 
-  birdList: []
+  birdList:
+  - {fileID: 11400000, guid: 008a8e63fcb6a2541a9ebd424dbf71c2, type: 2}
+  - {fileID: 11400000, guid: 635743f767e756449a55836d101895ed, type: 2}

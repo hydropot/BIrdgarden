@@ -161,7 +161,7 @@ public class BirdSpawner : MonoBehaviour
                     float failRoll = UnityEngine.Random.Range(0f, 1f);
                     if (failRoll < adjustedFailChance)
                     {
-                        Debug.Log($"{item.name}/{seat.name} 第 {i + 1} 次尝试失败（原 fail={config.failChance}, 环境修正后={adjustedFailChance:F2}）");
+                        //Debug.Log($"{item.name}/{seat.name} 第 {i + 1} 次尝试失败（原 fail={config.failChance}, 环境修正后={adjustedFailChance:F2}）");
                         continue;
                     }
 

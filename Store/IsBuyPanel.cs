@@ -64,6 +64,8 @@ public class IsBuyPanel : MonoBehaviour
             BackpackPagination.instance.RefreshPages(); // ¸üĞÂÏÔÊ¾
             ShopManager.current.ReloadShop();
             gameObject.SetActive(false);
+
+            //GameManager.current.UPSaveToCloud();
         }
         else
         {

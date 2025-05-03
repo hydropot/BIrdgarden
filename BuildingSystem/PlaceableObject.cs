@@ -37,7 +37,12 @@ public class PlaceableObject : MonoBehaviour
         BuildingSystem.current.TakeArea(areaTemp);
         item.isPlaced = true;
         // 只有当 item 不在 myplacedlibrary.itemList 中时才执行添加
-        if (!myplacedlibrary.itemList.Contains(item))myplacedlibrary.itemList.Add(item);
+        if (!myplacedlibrary.itemList.Contains(item))
+        {
+            myplacedlibrary.itemList.Add(item);
+            GameManager.current.UPSaveToCloud();
+        }
+
 
     }
 

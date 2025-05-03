@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 public class LevelSystem : MonoBehaviour
 {
-    private int XPNow;
+    public static int XPNow;
     //private int Level;
-    public static int Level { get; private set; }
+    public static int Level;
     private int xpToNext;
 
     [SerializeField] private GameObject levelPanel;
@@ -24,19 +24,24 @@ public class LevelSystem : MonoBehaviour
     private static Dictionary<int, int> xpToNextLevel = new Dictionary<int, int>();
     private static Dictionary<int, int[]> lvlReward = new Dictionary<int, int[]>();
 
+    public static LevelSystem Instance;
+
     private void Awake()
     {
+        Instance = this;
         slider = levelPanel.transform.Find("LVSlider").GetComponent<Image>();
         xpText = levelPanel.transform.Find("Text_XP").GetComponent<TextMeshProUGUI>();
         //starImage = levelPanel.transform.Find("Star").GetComponent<Image>();
         lvlText = levelPanel.transform.Find("Text_LV").GetComponent<TextMeshProUGUI>();
 
+        /*
         if (!initialized)
         {
             Initialize();
         }
 
         xpToNextLevel.TryGetValue(Level, out xpToNext);
+        */
     }
 
     
@@ -84,7 +89,7 @@ public class LevelSystem : MonoBehaviour
                 {
                     xpToNextLevel.Add(lvl, xp);
                     lvlReward.Add(lvl, new[] { curr1, curr2 });
-                    Debug.Log($"Added level {lvl} - XP: {xp}, Reward: {curr1}, {curr2}");
+                    //Debug.Log($"Added level {lvl} - XP: {xp}, Reward: {curr1}, {curr2}");
                 }
             }
 
@@ -144,18 +149,26 @@ public class LevelSystem : MonoBehaviour
     */
     private void Start()
     {
+        if (!initialized)
+        {
+            Initialize();
+        }
+
+        xpToNextLevel.TryGetValue(Level, out xpToNext);
+
         EventManager.Instance.AddListener<XPAddedGameEvent>(OnXPAdded);
         EventManager.Instance.AddListener<LevelChangedGameEvent>(OnLevelChanged);
         
         UpdateUI();
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         float fill = (float) XPNow / xpToNext;
         //slider.value = fill;
         slider.fillAmount = fill;
         xpText.text = XPNow + "/" + xpToNext;
+        lvlText.text = (Level + 1).ToString();
     }
 
     private void OnXPAdded(XPAddedGameEvent info)
@@ -170,6 +183,7 @@ public class LevelSystem : MonoBehaviour
             LevelChangedGameEvent levelChange = new LevelChangedGameEvent(Level);
             EventManager.Instance.QueueEvent(levelChange);
         }
+        GameManager.current?.UPSaveToCloud(); // 数据已变化后再保存
     }
 
     private void OnLevelChanged(LevelChangedGameEvent info)

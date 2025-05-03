@@ -29,12 +29,15 @@ public class ShopItemHolder : MonoBehaviour
         currencyImage.sprite = ShopManager.currencySprites[Item.Currency];
         priceText.text = Item.Price.ToString();
         //UIBlock.SetActive(false);
+        UnlockItem();
 
 
+        /*
         if (Item.Level >= LevelSystem.Level)
         {
             UnlockItem();
         }
+        */
     }
 
     public void UnlockItem()

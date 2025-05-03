@@ -13,7 +13,7 @@ public class Bird : ScriptableObject
     public BirdType Type;
     public Sprite Icon;
     public GameObject Prefab;
-    public bool isPlaced;
+    //public bool isPlaced;
     public bool isLocked;
 }
 

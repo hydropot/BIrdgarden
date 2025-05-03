@@ -39,7 +39,7 @@ public class BirdBehavior : MonoBehaviour
             if (placeableObject != null)
             {
                 itemType = placeableObject.item.Type;
-                Debug.Log("祖父节点类型: " + itemType);
+                //Debug.Log("祖父节点类型: " + itemType);
             }
         }
 
@@ -52,8 +52,11 @@ public class BirdBehavior : MonoBehaviour
     private void OnEnable()
     {
         //解锁图鉴系统中的鸟类
-        if (!mybirdlibrary.birdList.Contains(bird)) mybirdlibrary.birdList.Add(bird);
-        bird.isLocked = false;
+        if (!mybirdlibrary.birdList.Contains(bird))
+        {
+            mybirdlibrary.birdList.Add(bird);
+            bird.isLocked = false;
+        }
     }
 
     void Update()
@@ -69,6 +72,13 @@ public class BirdBehavior : MonoBehaviour
                 StopAllCoroutines(); // 中断其他行为协程
                 StartCoroutine(FlyAway());
                 AudioManager.instance.PlayFX("flapping");
+
+                if (!mybirdlibrary.birdList.Contains(bird))
+                {
+                    mybirdlibrary.birdList.Add(bird);
+                    bird.isLocked = false;
+                    GameManager.current.UPSaveToCloud();
+                }
 
             }
         }
@@ -165,3 +175,4 @@ public class BirdBehavior : MonoBehaviour
         transform.localScale = scale;
     }
 }
+

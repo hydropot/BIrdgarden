@@ -1,3 +1,4 @@
+using DG.Tweening.Core.Easing;
 using UnityEngine;
 
 public class PickCoins : MonoBehaviour
@@ -10,6 +11,7 @@ public class PickCoins : MonoBehaviour
             AudioManager.instance.PlayFX("pop4");
             GameManager.current.GetCoins(10);
             GameManager.current.GetXP(10);
+
             // 销毁金币对象
             Destroy(gameObject);
         }
