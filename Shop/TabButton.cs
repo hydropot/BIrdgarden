@@ -25,5 +25,6 @@ public class TabButton : MonoBehaviour, IPointerClickHandler
     {
         //on click select the tab
         tabGroup.OnTabSelected(this);
+        AudioManager.instance.PlayFX("drop4");
     }
 }

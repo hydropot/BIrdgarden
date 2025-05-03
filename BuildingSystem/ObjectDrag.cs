@@ -32,6 +32,7 @@ public class ObjectDrag : MonoBehaviour
         {
             BuildingSystem.current.FollowObject(GetComponent<PlaceableObject>());
         }
+
     }
 
     private void LateUpdate()
@@ -43,6 +44,8 @@ public class ObjectDrag : MonoBehaviour
             // 吸附到最近网格中心
             Vector3Int cellPos = BuildingSystem.current.gridLayout.WorldToCell(transform.position);
             transform.position = BuildingSystem.current.gridLayout.CellToLocalInterpolated(cellPos + new Vector3(0.5f, 0.5f, 0f));
+            //Debug.Log($"当前网格坐标: {cellPos}");
+
 
             // 再次更新排序层以确保吸附后正确遮挡
             spriteRenderer.sortingOrder = -(int)(transform.position.y * 100);

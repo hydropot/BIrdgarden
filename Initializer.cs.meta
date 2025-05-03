@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4f88b73a0efcea14da16165090adf1fe
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - myLibrary: {instanceID: 0}
+  - storeLibrary: {instanceID: 0}
+  - myplacedLibrary: {instanceID: 0}
+  - placedLibrary: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

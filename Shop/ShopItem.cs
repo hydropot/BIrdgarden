@@ -12,14 +12,16 @@ public class ShopItem : ScriptableObject
     public ObjectType Type;
     public Sprite Icon;
     public GameObject Prefab;
+    public bool isPlaced;
+    public Vector3Int cellPos;
 }
 
 //types of objects - also tabs
 public enum ObjectType
 {
-    AnimalHomes,
-    Animals,
-    ProductionBuildings,
-    TreesBushes,
+    Bowls,
+    Platforms,
+    Trees,
+    Toys,
     Decorations
 }

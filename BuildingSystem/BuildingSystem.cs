@@ -22,8 +22,15 @@ public class BuildingSystem : MonoBehaviour
     {
         current = this;
         BuildingRoot = buildingRoot; // 设置静态引用
+
+        string tilePath = "Tiles/";
+        tileBases.Add(TileType.Empty, null);
+        tileBases.Add(TileType.White, Resources.Load<TileBase>(tilePath + "white"));
+        tileBases.Add(TileType.Green, Resources.Load<TileBase>(tilePath + "green"));
+        tileBases.Add(TileType.Red, Resources.Load<TileBase>(tilePath + "red"));
     }
 
+    /*
     private void Start()
     {
         string tilePath = "Tiles/";
@@ -32,7 +39,7 @@ public class BuildingSystem : MonoBehaviour
         tileBases.Add(TileType.Green, Resources.Load<TileBase>(tilePath + "green"));
         tileBases.Add(TileType.Red, Resources.Load<TileBase>(tilePath + "red"));
     }
-
+    */
     private static TileBase[] GetTilesBlock(BoundsInt area, Tilemap tilemap)
     {
         TileBase[] array = new TileBase[area.size.x * area.size.y * area.size.z];
@@ -134,6 +141,29 @@ public class BuildingSystem : MonoBehaviour
         TempTilemap.SetTilesBlock(area, tileArray);
         prevArea = area;
     }
+
+
+    //初始化时使用，不用拖动就能将物品摆在指定网格的函数
+    public void PlaceObjectAtPosition(GameObject prefab, Vector3Int gridPos, PlacedLibrary placedLibrary)
+    {
+        Vector3 worldPos = gridLayout.CellToLocalInterpolated(gridPos + new Vector3(0.5f, 0.5f, 0));
+        GameObject obj = Instantiate(prefab, worldPos, Quaternion.identity);
+
+        PlaceableObject placeable = obj.GetComponent<PlaceableObject>();
+        placeable.myplacedlibrary = placedLibrary;
+
+        if (placeable.CanBePlaced())
+        {
+            placeable.Place(); // 会自动调用 TakeArea，变为绿色
+            //Debug.Log("BuildingSystem放置！");
+        }
+        else
+        {
+            Debug.LogWarning("指定位置不可放置！");
+            Destroy(obj);
+        }
+    }
+
 }
 
 public enum TileType

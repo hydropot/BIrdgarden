@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
+    [SerializeField] private StoreLibrary storeLibrary;
     //singletone pattern
     public static ShopManager current;
 
@@ -54,22 +55,54 @@ public class ShopManager : MonoBehaviour
 
     private void Load()
     {
-        //load every shop item from resources
-        ShopItem[] items = Resources.LoadAll<ShopItem>("Shop");
-
-        //initialize the dictionary
-        shopItems.Add(ObjectType.Animals, new List<ShopItem>());
-        shopItems.Add(ObjectType.AnimalHomes, new List<ShopItem>());
-        shopItems.Add(ObjectType.ProductionBuildings, new List<ShopItem>());
-        shopItems.Add(ObjectType.TreesBushes, new List<ShopItem>());
+        // 初始化字典（清空并重建）
+        shopItems.Clear();
+        shopItems.Add(ObjectType.Bowls, new List<ShopItem>());
+        shopItems.Add(ObjectType.Platforms, new List<ShopItem>());
+        shopItems.Add(ObjectType.Trees, new List<ShopItem>());
+        shopItems.Add(ObjectType.Toys, new List<ShopItem>());
         shopItems.Add(ObjectType.Decorations, new List<ShopItem>());
 
-        //add all shop items to the dictionary
-        foreach (var item in items)
+        // 遍历 StoreLibrary 中的所有 Goods
+        foreach (Goods goods in storeLibrary.goodsList)
         {
-            shopItems[item.Type].Add(item);
+            if (goods != null && goods.linkedShopItem != null)
+            {
+                ObjectType type = goods.linkedShopItem.Type;
+
+                if (shopItems.ContainsKey(type))
+                {
+                    shopItems[type].Add(goods.linkedShopItem);
+                }
+                else
+                {
+                    Debug.LogWarning($"未知类型的 ShopItem：{goods.linkedShopItem.name}，类型是 {type}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Goods 或 linkedShopItem 为 null：{goods?.name}");
+            }
         }
     }
+
+    public void ReloadShop()
+    {
+        // 清除已有 UI 元素
+        foreach (GameObject tabObject in shopTabs.objectsToSwap)
+        {
+            foreach (Transform child in tabObject.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        // 重新加载并初始化
+        Load();
+        Initialize();
+    }
+
+
 
     private void Initialize()
     {
@@ -113,7 +146,9 @@ public class ShopManager : MonoBehaviour
             LeanTween.moveY(prt, prt.anchoredPosition.y + rt.sizeDelta.y, time);
             opened = true;
             gameObject.SetActive(true);
-            Debug.Log("打开了");
+
+            RefreshAllItemPlacementUI();
+            //Debug.Log("打开了");
         }
         else
         {
@@ -124,7 +159,7 @@ public class ShopManager : MonoBehaviour
                     gameObject.SetActive(false);
                 });
             opened = false;
-            Debug.Log("关上了");
+            //Debug.Log("关上了");
         }
     }
 
@@ -149,4 +184,20 @@ public class ShopManager : MonoBehaviour
             Debug.Log("OnPointerClick");
         }
     }
+
+    private void RefreshAllItemPlacementUI()
+    {
+        for (int i = 0; i < shopTabs.objectsToSwap.Count; i++)
+        {
+            foreach (Transform child in shopTabs.objectsToSwap[i].transform)
+            {
+                ShopItemHolder holder = child.GetComponent<ShopItemHolder>();
+                if (holder != null)
+                {
+                    holder.RefreshPlacementUI();
+                }
+            }
+        }
+    }
+
 }

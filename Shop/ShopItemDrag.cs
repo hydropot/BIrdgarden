@@ -59,6 +59,7 @@ public class ShopItemDrag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
         cg.blocksRaycasts = true;
         img.maskable = true;
         rt.anchoredPosition = originPos;
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)

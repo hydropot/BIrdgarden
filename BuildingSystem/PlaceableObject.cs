@@ -5,6 +5,8 @@ public class PlaceableObject : MonoBehaviour
     public bool Placed { get; private set; }
     private Vector3 origin;
     public BoundsInt area;
+    public ShopItem item;
+    public PlacedLibrary myplacedlibrary;
 
     private float pressTime = 0f;
     private bool isPressing = false;
@@ -25,11 +27,20 @@ public class PlaceableObject : MonoBehaviour
         BoundsInt areaTemp = area;
         areaTemp.position = positionInt;
 
+        //Debug.Log($"放置在了网格坐标: {positionInt}");
+        AudioManager.instance.PlayFX("drop5");
+        item.cellPos = positionInt;
+
         Placed = true;
         origin = transform.position;
 
         BuildingSystem.current.TakeArea(areaTemp);
+        item.isPlaced = true;
+        // 只有当 item 不在 myplacedlibrary.itemList 中时才执行添加
+        if (!myplacedlibrary.itemList.Contains(item))myplacedlibrary.itemList.Add(item);
+
     }
+
 
     public void CheckPlacement()
     {

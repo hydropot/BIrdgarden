@@ -180,9 +180,9 @@ public class LevelSystem : MonoBehaviour
         UpdateUI();
 
         GameObject window = Instantiate(lvlWindowPrefab, GameManager.current.canvas.transform);
-        
+        AudioManager.instance.PlayFX("twinkle1");
         //initialize texts and images here
-        
+
         window.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(delegate
         {
             Destroy(window);
