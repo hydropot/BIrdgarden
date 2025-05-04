@@ -1,3 +1,4 @@
+using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,10 +12,20 @@ public class UISystem : MonoBehaviour
     public GameObject panelBuilding;            // 建筑Panel（建筑模式）
     public GameObject buttonCloseBuild;     // 退出建筑模式按钮
 
+    public GameObject loadingPanel;
+    public SkeletonGraphic loadingskeletonGraphic;
+
     [Header("Buttons")]
     public GameObject buttonMenuOpen;
 
-    //private bool isBuildMode = false;
+    public static UISystem current;
+
+    private void Awake()
+    {
+        current = this;
+        loadingPanel.SetActive(true);
+        ChangeSkinToName(loadingskeletonGraphic, "bird" + Random.Range(1, BirdSpawner.current.maxBirdType+1));
+    }
 
     void Start()
     {
@@ -96,5 +107,30 @@ public class UISystem : MonoBehaviour
     public void OnExitScene1()
     {
         SceneManager.LoadScene("SampleScene");
+    }
+
+    public void ChangeSkinToName(SkeletonGraphic skeletonGraphic, string skinName)
+    {
+        if (skeletonGraphic != null && skeletonGraphic.IsValid)
+        {
+            //var skinName = bird.name;
+
+            var skin = skeletonGraphic.Skeleton.Data.FindSkin(skinName);
+            if (skin != null)
+            {
+                skeletonGraphic.Skeleton.SetSkin(skin);
+                skeletonGraphic.Skeleton.SetSlotsToSetupPose();
+                skeletonGraphic.AnimationState.Apply(skeletonGraphic.Skeleton); // 应用当前动画状态
+                skeletonGraphic.Update(0); // 刷新动画
+            }
+            else
+            {
+                Debug.LogWarning($"Skin with name '{skinName}' not found in skeleton data.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("SkeletonGraphic is null or not initialized.");
+        }
     }
 }

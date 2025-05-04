@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class Initializer : MonoBehaviour
 {
@@ -13,12 +12,18 @@ public class Initializer : MonoBehaviour
     [SerializeField] private BirdLibrary birdLibrary;
 
     //public int maxcount;
-    
-    private void OnEnable()
+    public static Initializer current;
+    private void Awake()
+    {
+        //initialize fields
+        current = this;
+    }
+    public void Init()
     {
         InitLibrary();
         //InitBirds(maxcount);
         AudioManager.instance.PlayBGM("BGM");
+        Debug.Log("初始化完毕");
     }
 
     private void InitLibrary()
@@ -82,35 +87,6 @@ public class Initializer : MonoBehaviour
                 }
             }
         }
-
-        //Debug.Log("运行时初始化完成：Goods 和 ShopItem 状态已更新。");
     }
 
-    /*
-    private void InitBirds(int maxcount)
-    {
-        GameObject[] allItems = GameObject.FindGameObjectsWithTag("item");
-        foreach (GameObject itemObj in allItems)
-        {
-            Transform birdseat = itemObj.transform.Find("birdseat");
-            if (birdseat != null)
-            {
-                Debug.Log($"{itemObj.name}的birdseat在{birdseat.position}");
-
-                int rand = Random.Range(1, maxcount + 1);// 如maxcount输入10则为1-10的随机数
-                string path = $"Prefab/Bird/bird{rand}";
-                GameObject birdPrefab = Resources.Load<GameObject>(path);
-                if (birdPrefab != null)
-                {
-                    GameObject birdInstance = Instantiate(birdPrefab, birdseat.position, birdseat.rotation, birdseat);
-                    birdInstance.name = birdPrefab.name; // 可选：保持命名一致
-                }
-                else Debug.LogWarning($"找不到预制体路径: {path}");
-            }
-            else Debug.LogWarning($"GameObject {itemObj.name} 没有找到 birdseat 节点");
-        }
-
-        Debug.Log("运行时初始化完成：Goods 和 ShopItem 状态已更新，Bird 初始化完毕。");
-    }
-    */
 }

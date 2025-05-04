@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Spine.Unity;
+using Spine;
 
 public class BirdSlot : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
 
-    public Image iconImage;
-
     public GameObject UIblock;
+
+    public SkeletonGraphic skeletonGraphic;
 
     //public TextMeshProUGUI priceText;
 
@@ -33,9 +35,7 @@ public class BirdSlot : MonoBehaviour
         bird = targetbird;
 
         nameText.text = bird.Name;
-
-        iconImage.sprite = bird.Icon;
-        //iconImage.SetNativeSize();
+        UISystem.current.ChangeSkinToName(skeletonGraphic, bird.name);
 
         //priceText.text = bird.goodsPrice.ToString();
 
@@ -53,4 +53,5 @@ public class BirdSlot : MonoBehaviour
             if (button != null) button.enabled = true;
         }
     }
+
 }

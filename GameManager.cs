@@ -238,6 +238,7 @@ public class GameManager : MonoBehaviour
                     {
                         GetCoins(200); 
                         Debug.Log("首次登录，赠送 200 Coins");
+                        UISystem.current.loadingPanel.SetActive(false);
                     }
                 }
             }

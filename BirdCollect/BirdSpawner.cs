@@ -7,11 +7,17 @@ public class BirdSpawner : MonoBehaviour
 {
     public float environment=0;
     public float spawnIntervalMinutes = 30f;
-    public int maxBirdType = 10;
+    public int maxBirdType;
 
     private Dictionary<string, BirdSpawnConfig> spawnConfigs = new Dictionary<string, BirdSpawnConfig>();
 
-    void Start()
+    public static BirdSpawner current;
+    private void Awake()
+    {
+        //initialize fields
+        current = this;
+    }
+    public void InitBird()
     {
         LoadSpawnConfigs();
         SimulateOfflineSpawning();
@@ -33,9 +39,10 @@ public class BirdSpawner : MonoBehaviour
             return;
         }
 
-        TimeSpan delta = DateTime.Now - lastTime;
+        TimeSpan delta = GameExitTracker.OfflineTime.Value;
         int attemptCount = Mathf.FloorToInt((float)delta.TotalMinutes / spawnIntervalMinutes);
         Debug.Log($"离线时间 {delta.TotalMinutes:F1} 分钟，可生成尝试 {attemptCount} 次");
+
 
         if (attemptCount <= 0) return;
 
@@ -123,20 +130,13 @@ public class BirdSpawner : MonoBehaviour
 
     void SimulateOfflineSpawning()
     {
-        string lastTimeStr = PlayerPrefs.GetString("LastCloseTime", null);
-        if (string.IsNullOrEmpty(lastTimeStr))
+        if (!GameExitTracker.OfflineTime.HasValue)
         {
-            Debug.Log("没有找到上次退出时间，跳过模拟生成");
+            Debug.Log("离线时长尚未准备好，跳过模拟生成");
             return;
         }
 
-        if (!DateTime.TryParse(lastTimeStr, out DateTime lastTime))
-        {
-            Debug.LogWarning("无法解析退出时间：" + lastTimeStr);
-            return;
-        }
-
-        TimeSpan delta = DateTime.Now - lastTime;
+        TimeSpan delta = GameExitTracker.OfflineTime.Value;
         int attemptCount = Mathf.FloorToInt((float)delta.TotalMinutes / spawnIntervalMinutes);
         Debug.Log($"离线时间 {delta.TotalMinutes:F1} 分钟，可生成尝试 {attemptCount} 次");
 
@@ -161,7 +161,6 @@ public class BirdSpawner : MonoBehaviour
                     float failRoll = UnityEngine.Random.Range(0f, 1f);
                     if (failRoll < adjustedFailChance)
                     {
-                        //Debug.Log($"{item.name}/{seat.name} 第 {i + 1} 次尝试失败（原 fail={config.failChance}, 环境修正后={adjustedFailChance:F2}）");
                         continue;
                     }
 
@@ -175,18 +174,18 @@ public class BirdSpawner : MonoBehaviour
                         GameObject bird = Instantiate(prefab, seat.position, seat.rotation, seat);
                         bird.name = prefab.name;
                         Debug.Log($"在 {item.name}/{seat.name} 离线生成 bird{birdId}");
-                        //生成硬币
-                        GameObject coinPrefab = Resources.Load<GameObject>("Prefab/Currency/coins");
-                        GameObject coin = Instantiate(coinPrefab, seat.position + Vector3.left *(UnityEngine.Random.Range(-0.5f, 0.5f)), seat.rotation, seat);
-                        coin.name = coinPrefab.name;
-                        //Debug.Log($"在 {item.name}/{seat.name} 同时生成 coins");
 
+                        // 生成硬币
+                        GameObject coinPrefab = Resources.Load<GameObject>("Prefab/Currency/coins");
+                        GameObject coin = Instantiate(coinPrefab, seat.position + Vector3.left * (UnityEngine.Random.Range(-0.5f, 0.5f)), seat.rotation, seat);
+                        coin.name = coinPrefab.name;
                     }
                     break; // 成功生成一次就退出尝试
                 }
             }
         }
     }
+
 
 
     int SelectBirdByWeight(Dictionary<int, float> weights)

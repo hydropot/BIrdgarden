@@ -1,7 +1,6 @@
 using Spine.Unity;
 using System.Collections;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class BirdBehavior : MonoBehaviour
 {

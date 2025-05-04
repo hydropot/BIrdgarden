@@ -162,22 +162,34 @@ public class LevelSystem : MonoBehaviour
         UpdateUI();
     }
 
+    private int XPToNext
+    {
+        get
+        {
+            if (!initialized) Initialize();
+            xpToNextLevel.TryGetValue(Level, out var val);
+            return val;
+        }
+    }
     public void UpdateUI()
     {
-        float fill = (float) XPNow / xpToNext;
+        if (XPNow < 0)
+        {
+            XPNow = 0;
+        }
+        float fill = (float) XPNow / XPToNext;
         //slider.value = fill;
         slider.fillAmount = fill;
-        xpText.text = XPNow + "/" + xpToNext;
+        xpText.text = XPNow + "/" + XPToNext;
         lvlText.text = (Level + 1).ToString();
     }
-
     private void OnXPAdded(XPAddedGameEvent info)
     {
         XPNow += info.amount;
         
         UpdateUI();
 
-        if (XPNow >= xpToNext)
+        if (XPNow >= XPToNext)
         {
             Level++;
             LevelChangedGameEvent levelChange = new LevelChangedGameEvent(Level);
@@ -188,7 +200,7 @@ public class LevelSystem : MonoBehaviour
 
     private void OnLevelChanged(LevelChangedGameEvent info)
     {
-        XPNow -= xpToNext;
+        XPNow -= XPToNext;
         xpToNext = xpToNextLevel[info.newLvl];
         lvlText.text = (info.newLvl + 1).ToString();
         UpdateUI();

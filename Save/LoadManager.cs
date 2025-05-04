@@ -9,6 +9,8 @@ public class LoadManager : MonoBehaviour
     [SerializeField] private StoreLibrary storeLibrary;
     [SerializeField] private PlacedLibrary placedLibrary;
 
+    //public GameObject loadingPanel;
+
     public static LoadManager Instance;
 
     private void Awake()
@@ -77,7 +79,10 @@ public class LoadManager : MonoBehaviour
 
         CurrencySystem.Instance.Refresh();
         LevelSystem.Instance.UpdateUI();
+        Initializer.current.Init();
+        BirdSpawner.current.InitBird();
 
+        UISystem.current.loadingPanel.SetActive(false);
 
         /*
         if (!PlayerPrefs.HasKey("HasPlayedBefore"))

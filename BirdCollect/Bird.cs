@@ -11,7 +11,6 @@ public class Bird : ScriptableObject
     //public int Price;
     public CurrencyType Currency;
     public BirdType Type;
-    public Sprite Icon;
     public GameObject Prefab;
     //public bool isPlaced;
     public bool isLocked;

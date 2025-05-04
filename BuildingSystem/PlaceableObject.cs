@@ -27,7 +27,7 @@ public class PlaceableObject : MonoBehaviour
         BoundsInt areaTemp = area;
         areaTemp.position = positionInt;
 
-        //Debug.Log($"放置在了网格坐标: {positionInt}");
+        Debug.Log($"放置在了网格坐标: {positionInt}");
         AudioManager.instance.PlayFX("drop5");
         item.cellPos = positionInt;
 
@@ -40,9 +40,8 @@ public class PlaceableObject : MonoBehaviour
         if (!myplacedlibrary.itemList.Contains(item))
         {
             myplacedlibrary.itemList.Add(item);
-            GameManager.current.UPSaveToCloud();
+            
         }
-
 
     }
 
