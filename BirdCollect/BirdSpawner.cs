@@ -90,42 +90,6 @@ public class BirdSpawner : MonoBehaviour
             }
         }
 
-
-        /*
-            // 为每个 item 最多尝试一次
-            foreach (Transform seat in availableSeats)
-            {
-                GameObject item = seat.parent.gameObject;
-                string pureName = item.name.Replace("(Clone)", "").Trim();
-
-                if (!spawnConfigs.TryGetValue(pureName, out var config))
-                    continue;
-
-                for (int i = 0; i < attemptCount; i++)
-                {
-                    float adjustedFailChance = Mathf.Max(0f, config.failChance - environment);
-                    float failRoll = UnityEngine.Random.Range(0f, 1f);
-                    if (failRoll < adjustedFailChance)
-                    {
-                        Debug.Log($"{item.name} 第 {i + 1} 次尝试失败（原 fail={config.failChance}, 环境修正后={adjustedFailChance:F2}）");
-                        continue;
-                    }
-
-                    int birdId = SelectBirdByWeight(config.birdWeights);
-                    if (birdId == -1) continue;
-
-                    string path = $"Prefab/Bird/bird{birdId}";
-                    GameObject prefab = Resources.Load<GameObject>(path);
-                    if (prefab != null)
-                    {
-                        GameObject bird = Instantiate(prefab, seat.position, seat.rotation, seat);
-                        bird.name = prefab.name;
-                        Debug.Log($"在 {item.name} 离线生成 bird{birdId}");
-                    }
-                    break; // 成功生成一次就退出尝试
-                }
-            }
-        */
     }
 
     void SimulateOfflineSpawning()
